@@ -48,7 +48,7 @@
 
       try {
         const query = new URLSearchParams(data).toString();
-        const response = await fetch(`http://localhost:8080/restaurants/search?${query}`);
+        const response = await fetch(`/restaurants/search?${query}`);
 
         if (!response.ok) throw new Error('Error during search call');
 
