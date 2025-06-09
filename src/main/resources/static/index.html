@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Restaurant Finder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 p-6">
+
+<div class="max-w-2xl mx-auto bg-white shadow-md rounded-xl p-6 space-y-6">
+    <h1 class="text-2xl font-bold text-center">🍽️ Restaurant Search</h1>
+
+    <form id="searchForm" class="grid grid-cols-1 gap-4">
+        <input class="input" type="text" name="name" placeholder="Restaurant's name" />
+        <select class="input" name="customerRating">
+            <option value="">Lower validation</option>
+            <option value="1">⭐ 1</option>
+            <option value="2">⭐ 2</option>
+            <option value="3">⭐ 3</option>
+            <option value="4">⭐ 4</option>
+            <option value="5">⭐ 5</option>
+        </select>
+        <input class="input" type="number" name="distance" placeholder="Max distance" min="1" max="10" />
+        <input class="input" type="number" name="price" placeholder="Max value (US$)" min="10" max="50" />
+        <input class="input" type="text" name="cuisine" placeholder="Restaurant's cuisine" />
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
+            Search
+        </button>
+    </form>
+
+    <div id="results" class="space-y-4">
+        <!-- results will be displayed here -->
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('searchForm');
+    const resultsDiv = document.getElementById('results');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resultsDiv.innerHTML = '🔄 Searching...';
+
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      Object.keys(data).forEach((k) => data[k] === '' && delete data[k]);
+
+      try {
+        const query = new URLSearchParams(data).toString();
+        const response = await fetch(`http://localhost:8080/restaurants/search?${query}`);
+
+        if (!response.ok) throw new Error('Error during search call');
+
+        const restaurants = await response.json();
+
+        if (restaurants.length === 0) {
+          resultsDiv.innerHTML = '<p class="text-center text-gray-500">No restaurant was found.</p>';
+        } else {
+          resultsDiv.innerHTML = restaurants.map(r => `
+            <div class="border rounded p-4 shadow-sm bg-gray-50">
+              <h2 class="text-lg font-bold">${r.name}</h2>
+              <p>⭐ ${r.customerRating} | 💰 $${r.price} | 📍 ${r.distance} mi | 🍴 ${r.cuisine}</p>
+            </div>
+          `).join('');
+        }
+
+      } catch (err) {
+        resultsDiv.innerHTML = `<p class="text-red-500 text-center">Error during search: ${err.message}</p>`;
+      }
+    });
+</script>
+
+<style>
+    .input {
+      @apply border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-500;
+    }
+</style>
+
+</body>
+</html>
