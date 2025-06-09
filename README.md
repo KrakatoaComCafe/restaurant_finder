@@ -48,6 +48,21 @@ These files are loaded into memory on application startup.
 
 ---
 
+### 🌐 Static HTML Frontend
+A simple static HTML file is included to allow users to query the API via a web interface.
+
+#### Location
+The file is located at:
+```declarative
+src/main/resources/static/index.html
+```
+#### Features
+- Form to input search parameters (Name, Rating, Distance, Price, Cuisine)
+- Fetches and display results from the `/restaurants/search` endpoint
+- Fully static: no build tools needed, only HTML + JavaScript
+
+---
+
 ### 📡 API Endpoints
 #### 🔍 Search Restaurants
 *GET* /restaurants/search
