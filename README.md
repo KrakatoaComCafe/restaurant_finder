@@ -14,6 +14,12 @@ A simple REST API for searching the best-matched restaurants based on various se
 
 ---
 
+### 🐳 Run with Docker Compose
+To run the project with docker compose, execute the following command:
+``` bash
+    docker compose up --build
+```
+
 ### 🐳 Run with Docker
 First, build the Docker image:
 ``` bash
@@ -22,10 +28,6 @@ First, build the Docker image:
 Then, run it:
 ``` bash
     docker run -p 8080:8080 restaurant-app
-```
-Or just use Docker Compose
-``` bash
-    docker-compose up --build
 ```
 
 ---
@@ -50,6 +52,12 @@ These files are loaded into memory on application startup.
 
 ### 🌐 Static HTML Frontend
 A simple static HTML file is included to allow users to query the API via a web interface.
+
+#### Address
+To access the frontend, access the address bellow when the application is running
+```declarative
+http://localhost:8080/index.html
+```
 
 #### Location
 The file is located at:
@@ -78,8 +86,12 @@ Query Parameters (all optional):
 | `cuisine`        | Full or partial name of the cuisine     | `Chi`   |
 
 Request Example:
+```declarative
+GET /restaurants/search?name=Chi&customerRating=3&distance=5&price=20
+```
+Example CURL:
 ```bash
-    GET /restaurants/search?name=Chi&customerRating=3&distance=5&price=20
+  curl "http://localhost:8080/restaurants/search?name=Chi&customerRating=5&price=45&distance=5&cuisine=viet"
 ```
 
 Response:
