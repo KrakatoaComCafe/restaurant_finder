@@ -10,7 +10,8 @@ on:
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-last
+    runs-on: ubuntu-lastest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
