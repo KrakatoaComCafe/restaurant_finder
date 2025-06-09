@@ -1,2 +1,102 @@
-# restaurant_finder
-This is an application that will return Restaurants basead on user's Input
+# 🍽️ Restaurant Finder
+
+A simple REST API for searching the best-matched restaurants based on various search criteria. Built with Kotlin, Spring Boot, and Clean Architecture.
+
+---
+
+## 🚀 How to Run Locally
+
+### ✅ Prerequisites
+
+- JDK 21+
+- [Gradle](https://gradle.org/install/) 8.14 or use the Gradle Wrapper
+- Docker (optional)
+
+---
+
+### 🐳 Run with Docker
+First, build the Docker image:
+``` bash
+    docker build -t restaurant-app .
+```
+Then, run it:
+``` bash
+    docker run -p 8080:8080 restaurant-app
+```
+Or just use Docker Compose
+``` bash
+    docker-compose up --build
+```
+
+---
+
+### 📦 Run with Gradle (locally)
+
+``` bash
+    ./gradlew bootRun
+```
+Application will be available at: http://localhost:8080
+
+---
+
+### 📂 CSV Files
+The application expects two CSV files located in `src/main/resources/csv`:
+- restaurant.csv
+- cuisine.csv
+
+These files are loaded into memory on application startup.
+
+---
+
+### 📡 API Endpoints
+#### 🔍 Search Restaurants
+*GET* /restaurants/search
+
+Query Parameters (all optional):
+
+| Parameter        | Description                             | Example |
+|------------------| --------------------------------------- | ------- |
+| `name`           | Full or partial name of the restaurant  | `Mcd`   |
+| `customerRating` | Minimum customer rating                 | `3`     |
+| `distance`       | Maximum distance in miles               | `5`     |
+| `price`          | Maximum price per person                | `20`    |
+| `cuisine`        | Full or partial name of the cuisine     | `Chi`   |
+
+Request Example:
+```bash
+    GET /restaurants/search?name=Chi&customerRating=3&distance=5&price=20
+```
+
+Response:
+``` json
+[
+  {
+    "name": "Chili Garden",
+    "customerRating": 4,
+    "distance": 2,
+    "price": 18,
+    "cuisine": "Chinese"
+  },
+  ...
+]
+```
+- Returns up to 5 best-matched results
+- Sorted by:
+  1. Distance (ascending)
+  2. Customer Rating (Descending)
+  3. Price (ascending)
+
+---
+
+### 🧪 Run Tests
+```bash
+    ./gradlew test
+```
+
+---
+
+### 🛠 Assumptions
+
+- CSV files are well-formated and do not contain duplicates
+- Each restaurant is associated with a single cuisine
+- The search parameters have an "AND" relationship
